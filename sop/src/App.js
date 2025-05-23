@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, X, Plus, User, BarChart3, LogOut, Camera } from 'lucide-react';
+import './App.css';
 
-const TinderApp = () => {
+function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [users, setUsers] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -152,25 +153,25 @@ const TinderApp = () => {
   const opacity = 1 - Math.abs(dragOffset.x) / 300;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-400 via-purple-500 to-indigo-600">
-      <nav className="bg-white shadow-lg p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-pink-600">SwipeApp</h1>
-        <div className="flex space-x-4">
+    <div className="app">
+      <nav className="navbar">
+        <h1 className="app-title">SwipeApp</h1>
+        <div className="nav-buttons">
           <button
             onClick={() => setShowUpload(true)}
-            className="bg-pink-500 text-white p-2 rounded-full hover:bg-pink-600 transition-colors"
+            className="nav-btn upload-btn"
           >
             <Plus size={20} />
           </button>
           <button
             onClick={() => setShowAbout(!showAbout)}
-            className="bg-purple-500 text-white p-2 rounded-full hover:bg-purple-600 transition-colors"
+            className="nav-btn about-btn"
           >
             <User size={20} />
           </button>
           <button
             onClick={handleLogout}
-            className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+            className="nav-btn logout-btn"
           >
             <LogOut size={20} />
           </button>
@@ -192,11 +193,11 @@ const TinderApp = () => {
       )}
 
       {!showAbout && !showUpload && (
-        <div className="flex justify-center items-center min-h-[calc(100vh-80px)] p-4">
-          <div className="relative w-80 h-96">
+        <div className="card-container">
+          <div className="card-wrapper">
             {currentCard ? (
               <div
-                className="absolute inset-0 bg-white rounded-2xl shadow-2xl overflow-hidden cursor-grab active:cursor-grabbing transform transition-transform"
+                className="card"
                 style={{
                   transform: `translateX(${dragOffset.x}px) translateY(${dragOffset.y}px) rotate(${rotation}deg)`,
                   opacity: opacity
@@ -212,31 +213,30 @@ const TinderApp = () => {
                 <img
                   src={currentCard.image}
                   alt={currentCard.name}
-                  className="w-full h-3/4 object-cover"
+                  className="card-image"
                   draggable={false}
                 />
-                <div className="p-4">
-                  <h3 className="text-xl font-bold">{currentCard.name}, {currentCard.age}</h3>
-                  <p className="text-gray-600 text-sm mt-2">{currentCard.subtitle}</p>
+                <div className="card-info">
+                  <h3 className="card-name">{currentCard.name}, {currentCard.age}</h3>
+                  <p className="card-subtitle">{currentCard.subtitle}</p>
                 </div>
                 
-                {/* Swipe indicators */}
                 {dragOffset.x > 50 && (
-                  <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full font-bold text-sm">
+                  <div className="swipe-indicator smash">
                     SMASH
                   </div>
                 )}
                 {dragOffset.x < -50 && (
-                  <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full font-bold text-sm">
+                  <div className="swipe-indicator pass">
                     PASS
                   </div>
                 )}
               </div>
             ) : (
-              <div className="flex items-center justify-center h-full bg-white rounded-2xl shadow-2xl">
-                <div className="text-center">
-                  <h3 className="text-2xl font-bold text-gray-500 mb-4">No more cards!</h3>
-                  <p className="text-gray-400">Check back later for more profiles</p>
+              <div className="no-cards">
+                <div className="no-cards-content">
+                  <h3 className="no-cards-title">No more cards!</h3>
+                  <p className="no-cards-text">Check back later for more profiles</p>
                 </div>
               </div>
             )}
@@ -245,16 +245,16 @@ const TinderApp = () => {
       )}
 
       {!showAbout && !showUpload && currentCard && (
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-8">
+        <div className="action-buttons">
           <button
             onClick={() => handleSwipe('left')}
-            className="bg-red-500 text-white p-4 rounded-full shadow-lg hover:bg-red-600 transition-colors"
+            className="action-btn pass-btn"
           >
             <X size={24} />
           </button>
           <button
             onClick={() => handleSwipe('right')}
-            className="bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-colors"
+            className="action-btn smash-btn"
           >
             <Heart size={24} />
           </button>
@@ -262,9 +262,9 @@ const TinderApp = () => {
       )}
     </div>
   );
-};
+}
 
-const LoginScreen = ({ onLogin }) => {
+function LoginScreen({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -275,31 +275,31 @@ const LoginScreen = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-400 via-purple-500 to-indigo-600 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center mb-8">Welcome to SwipeApp</h2>
-        <div className="space-y-6">
-          <div>
+    <div className="login-screen">
+      <div className="login-container">
+        <h2 className="login-title">Welcome to SwipeApp</h2>
+        <div className="login-form">
+          <div className="input-group">
             <input
               type="text"
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="login-input"
             />
           </div>
-          <div>
+          <div className="input-group">
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="login-input"
             />
           </div>
           <button
             onClick={handleSubmit}
-            className="w-full bg-pink-500 text-white p-3 rounded-lg hover:bg-pink-600 transition-colors font-semibold"
+            className="login-button"
           >
             Login
           </button>
@@ -307,54 +307,54 @@ const LoginScreen = ({ onLogin }) => {
       </div>
     </div>
   );
-};
+}
 
-const AboutPage = ({ userPosts, onClose }) => {
+function AboutPage({ userPosts, onClose }) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto">
-        <div className="p-6 border-b">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">Your Posts & Stats</h2>
+    <div className="modal-overlay">
+      <div className="modal-container">
+        <div className="modal-header">
+          <div className="modal-header-content">
+            <h2 className="modal-title">Your Posts & Stats</h2>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
+              className="close-button"
             >
               <X size={24} />
             </button>
           </div>
         </div>
         
-        <div className="p-6">
+        <div className="modal-content">
           {userPosts.length === 0 ? (
-            <p className="text-gray-500 text-center">No posts yet. Upload your first photo!</p>
+            <p className="no-posts">No posts yet. Upload your first photo!</p>
           ) : (
-            <div className="space-y-4">
+            <div className="posts-list">
               {userPosts.map((post) => {
                 const total = post.smashes + post.passes;
                 const smashRate = total > 0 ? Math.round((post.smashes / total) * 100) : 0;
                 
                 return (
-                  <div key={post.id} className="border rounded-lg p-4 flex space-x-4">
+                  <div key={post.id} className="post-item">
                     <img
                       src={post.image}
                       alt={post.name}
-                      className="w-20 h-20 object-cover rounded-lg"
+                      className="post-image"
                     />
-                    <div className="flex-1">
-                      <h3 className="font-semibold">{post.subtitle}</h3>
-                      <div className="mt-2 flex space-x-4 text-sm">
-                        <span className="text-green-600">❤️ {post.smashes} Smashes</span>
-                        <span className="text-red-600">✕ {post.passes} Passes</span>
+                    <div className="post-details">
+                      <h3 className="post-subtitle">{post.subtitle}</h3>
+                      <div className="post-stats">
+                        <span className="stat smash-stat">❤️ {post.smashes} Smashes</span>
+                        <span className="stat pass-stat">✕ {post.passes} Passes</span>
                       </div>
-                      <div className="mt-1">
-                        <div className="flex items-center space-x-2">
+                      <div className="rate-section">
+                        <div className="rate-info">
                           <BarChart3 size={16} />
-                          <span className="text-sm font-medium">{smashRate}% Smash Rate</span>
+                          <span className="rate-text">{smashRate}% Smash Rate</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                        <div className="progress-bar">
                           <div
-                            className="bg-green-500 h-2 rounded-full"
+                            className="progress-fill"
                             style={{ width: `${smashRate}%` }}
                           ></div>
                         </div>
@@ -369,9 +369,9 @@ const AboutPage = ({ userPosts, onClose }) => {
       </div>
     </div>
   );
-};
+}
 
-const UploadModal = ({ onUpload, onClose }) => {
+function UploadModal({ onUpload, onClose }) {
   const [imageUrl, setImageUrl] = useState('');
   const [subtitle, setSubtitle] = useState('');
 
@@ -382,23 +382,23 @@ const UploadModal = ({ onUpload, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
-        <div className="p-6 border-b">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold">Upload New Photo</h2>
+    <div className="modal-overlay">
+      <div className="upload-modal">
+        <div className="modal-header">
+          <div className="modal-header-content">
+            <h2 className="modal-title">Upload New Photo</h2>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
+              className="close-button"
             >
               <X size={24} />
             </button>
           </div>
         </div>
         
-        <div className="p-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+        <div className="upload-form">
+          <div className="form-group">
+            <label className="form-label">
               Image URL
             </label>
             <input
@@ -406,12 +406,12 @@ const UploadModal = ({ onUpload, onClose }) => {
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="https://example.com/image.jpg"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="form-input"
             />
           </div>
           
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="form-group">
+            <label className="form-label">
               Subtitle
             </label>
             <input
@@ -419,21 +419,20 @@ const UploadModal = ({ onUpload, onClose }) => {
               value={subtitle}
               onChange={(e) => setSubtitle(e.target.value)}
               placeholder="Tell them about yourself..."
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="form-input"
             />
           </div>
           
-          <div className="flex space-x-3 pt-4">
+          <div className="form-buttons">
             <button
-              type="button"
               onClick={onClose}
-              className="flex-1 bg-gray-300 text-gray-700 p-3 rounded-lg hover:bg-gray-400 transition-colors"
+              className="form-btn cancel-btn"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
-              className="flex-1 bg-pink-500 text-white p-3 rounded-lg hover:bg-pink-600 transition-colors"
+              className="form-btn submit-btn"
             >
               Upload
             </button>
@@ -442,6 +441,6 @@ const UploadModal = ({ onUpload, onClose }) => {
       </div>
     </div>
   );
-};
+}
 
-export default Sop;
+export default App;
